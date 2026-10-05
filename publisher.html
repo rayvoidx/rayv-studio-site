@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAYV Studio Publisher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">RAYV Studio</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="publisher.html">RAYV Studio Publisher</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </nav>
+</header>
+<main>
+<h1>RAYV Studio Publisher</h1>
+<p class="lead">An internal tool, used only by the studio's operator, for publishing our own videos to our own YouTube channels.</p>
+<p class="badge"><a href="https://www.youtube.com" rel="noopener"><img src="assets/developed-with-youtube-sentence-case-dark.png" alt="Developed with YouTube"></a></p>
+
+<h2>What it does</h2>
+<ul>
+  <li>Uploads finished videos to channels owned by the operator, as private videos.</li>
+  <li>Sets each video's custom thumbnail and scheduled publish time, and adds it to the channel's own playlist.</li>
+  <li>Checks that YouTube finished processing a video before its scheduled time.</li>
+  <li>Shows the operator a private dashboard of view, like and subscriber counts for the same channels.</li>
+</ul>
+
+<h2>Who can use it</h2>
+<p>Only the operator. The tool is not public, not offered to other people, and does not access any channel the operator does not own.
+Each channel is connected through Google OAuth by the channel owner, and access can be revoked at any time in the
+<a href="https://security.google.com/settings/security/permissions" rel="noopener">Google security settings page</a>.</p>
+
+<h2>YouTube API Services used</h2>
+<div class="table-wrap"><table>
+  <tr><th>Method</th><th>Purpose</th></tr>
+  <tr><td>videos.insert</td><td>Upload our own videos</td></tr>
+  <tr><td>videos.update</td><td>Set scheduled publish time and correct metadata</td></tr>
+  <tr><td>videos.list</td><td>Check processing status and read view and like counts</td></tr>
+  <tr><td>videos.delete</td><td>Remove a defective upload that is being replaced</td></tr>
+  <tr><td>thumbnails.set</td><td>Set custom thumbnails</td></tr>
+  <tr><td>playlistItems.insert / playlistItems.list</td><td>Add videos to and list the channel's own uploads and playlists</td></tr>
+  <tr><td>channels.list</td><td>Identify the connected channel and read its subscriber count</td></tr>
+</table></div>
+
+<p class="meta">By using this tool you agree to be bound by the <a href="https://www.youtube.com/t/terms" rel="noopener">YouTube Terms of Service</a>.</p>
+</main>
+<footer>
+  <p>RAYV Studio · Operated by Park Jaehyun, South Korea · Contact: jhighllight@gmail.com</p>
+  <p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a> ·
+    <a href="https://www.youtube.com/t/terms" rel="noopener">YouTube Terms of Service</a> ·
+    <a href="https://www.google.com/policies/privacy" rel="noopener">Google Privacy Policy</a></p>
+</footer>
+</body>
+</html>
