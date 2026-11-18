@@ -1,0 +1,20 @@
+/* Observation only. Daily execution is launchd + the deterministic controller. */
+(()=>{'use strict';
+const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const names={academy:'영어회화 관리',saeos:'SAE OS · 미디어',kernel:'공개 연구 커널',jnj:'J&J 웹·회화 게임',isitai:'isitai 웹·앱',toolhub:'Toolhub',th01:'Seller Close Kit',social:'소셜 트렌드 서비스',th02:'Creator Business Kit'};
+const labels={queued:'첫 실행 대기',repairing:'코드 수리 중',verified:'검증 완료',publish_pending:'전송 확인 대기',pr_open:'PR 검사 중',ci_wait:'GitHub 검사 대기',ci_failed:'검사 실패',merge_blocked:'보호 규칙 대기',merged:'GitHub 머지 완료',no_change:'수정 필요 없음',local_merged:'로컬 반영 완료',local_merge_pending:'로컬 반영 대기',head_changed:'코드 변경 감지',merge_conflict:'병합 충돌',closed:'PR 닫힘',gated:'수정 범위 확인',exhausted:'일일 시도 상한',retryable_failure:'재시도 대기',resource_wait:'자원 여유 대기',inventory_failed:'소스 수집 확인'};
+let revision='';
+async function poll(){
+ let box=document.getElementById('studio-maintenance');const architecture=document.querySelector('.studio-architecture');
+ if(!box){box=document.createElement('section');box.id='studio-maintenance';box.className='studio-maintenance';const heading=architecture?.querySelector('.studio-section-head');if(heading)heading.after(box);else(document.querySelector('main')||document.body).append(box);}
+ try{const response=await fetch('/api/studio/improvement',{cache:'no-store'});if(!response.ok)throw Error('관측 연결 확인 필요');const data=await response.json();if(data.error)throw Error('점검 기록 확인 필요: '+data.error);
+  const key=JSON.stringify(data);if(key===revision)return;revision=key;
+  const latest=data.latest||{},rows=latest.repositories||{},setup=latest.date==='setup-preflight';const source=Object.values(rows).reduce((n,r)=>n+(r.source_files||0),0);
+  box.innerHTML=`<span class="studio-kicker">ENGINEERING / DAILY SELF-IMPROVEMENT</span><h3>매일 07:00 자율 코드 점검</h3><p>${setup?'설치 사전 점검 완료 · 실제 수리 첫 실행 예정':'소스 점검 → 문제 수정 → 고정 검사 → PR → GitHub 머지'} · Asia/Seoul · 영상 GPU 사용 없음</p><div class="improve-facts"><div><b>11.02 · 07:00</b><span>최초 실행 · 2026년 KST</span></div><div><b>${data.repositories.length} / ${data.repositories.filter(r=>r.github).length}</b><span>대상 저장소 / GitHub 연결</span></div><div><b>${source.toLocaleString('ko-KR')}</b><span>인벤토리의 소스 파일 · 의미 검수와 별도</span></div><div><b>${new Date(data.next_run).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Seoul'})}</b><span>다음 예정 ${new Date(data.next_run).toLocaleDateString('ko-KR',{timeZone:'Asia/Seoul'})}</span></div></div><div class="improve-repos">${data.repositories.map(repo=>{const r=rows[repo.id]||{},url=/^https:\/\/github\.com\/rayvoidx\/[\w.-]+\/pull\/\d+$/.test(r.pr_url||'')?r.pr_url:null;return `<article class="improve-repo" data-state="${escape(r.status||'queued')}"><header><strong>${names[repo.id]||escape(repo.id)}</strong><small>${labels[r.status]||'대기'}</small></header><p>소스 ${r.source_files??'—'}개 · ${repo.github?'GitHub PR·머지':'로컬 전용'}${r.local_sync?.status==='pending'?' · 로컬 동기화 대기':''}</p>${url?`<a href="${escape(url)}" target="_blank" rel="noopener">PR 상태 확인 ↗</a>`:''}${r.last_error?`<details><summary>확인할 내용</summary>${escape(r.last_error)}</details>`:''}</article>`}).join('')}</div><div class="improve-foot"><span>기존 Claude Code 구독 · 수정자와 GitHub 실행기 분리 · 검사 통과한 정확한 코드만 머지<br>미커밋 작업 보존 · 검사 실패/충돌/자원 부족은 상태로 기록 · 불필요한 매일 커밋 강제 없음</span><code>POLICY ${escape(data.policy_sha256.slice(0,12))}</code></div>`;
+ }catch(error){if(!box.children.length)box.textContent=error.message;}
+}
+poll();setInterval(poll,30000);
+const managerScript=document.createElement('script');managerScript.src='/studio-assets/manager.js';managerScript.defer=true;document.head.append(managerScript);
+const htmlStyle=document.createElement('link');htmlStyle.rel='stylesheet';htmlStyle.href='/studio-assets/html-os.css';document.head.append(htmlStyle);
+const htmlScript=document.createElement('script');htmlScript.src='/studio-assets/html-os.js';htmlScript.defer=true;document.head.append(htmlScript);
+})();
